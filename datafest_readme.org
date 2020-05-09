@@ -1,0 +1,11 @@
+#+title: Datafest 2020 Files
+* LSTM_training folder:
+** This folder contains all python files on how our deep learning model for detecting polarity of sentiment was built and optimized.
+*** text_dataset_cleaning.py
+Details how our imdb movie dataset was preprocessed and how our word-to-int dictionary was defined
+*** optimize_lstm.py
+Details how the hyperparameters of the LSTM model were optimized
+* youtube_scraping folder:
+** This folder contains all python files on how our YouTube video dataset was obtained
+*** category_writing.py
+Details how the youtube videos used in the dataset were gathered
