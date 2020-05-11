@@ -46,7 +46,7 @@ def gather_vids_US(category, pub_after, pub_before, language):
         publishedBefore = pub_before + 'T00:00:00Z',
         relevanceLanguage = language,
         regionCode = 'us',
-        maxResults = '15',
+        maxResults = '10',
         ).execute()
     # region 2: central
     search_response_middle = youtube.search().list(
@@ -61,7 +61,7 @@ def gather_vids_US(category, pub_after, pub_before, language):
         publishedBefore = pub_before + 'T00:00:00Z',
         relevanceLanguage = language,
         regionCode = 'us',
-        maxResults = '15',
+        maxResults = '10',
         ).execute()
     # region 3: east
     search_response_right = youtube.search().list(
@@ -76,7 +76,7 @@ def gather_vids_US(category, pub_after, pub_before, language):
         publishedBefore = pub_before + 'T00:00:00Z',
         relevanceLanguage = language,
         regionCode = 'us',
-        maxResults = '15',
+        maxResults = '10',
         ).execute()
     search_response_left = search_response_left['items']
     search_response_middle = search_response_middle['items']
@@ -107,12 +107,188 @@ def gather_vids_US(category, pub_after, pub_before, language):
         sorted_arr_all_link.append(minimum)
         arr_all_link.remove(minimum)
     print(sorted_arr_all_link)
-    # retrieve top 15 most viewed videos from the list
+    # retrieve top 10 most viewed videos from the list
     sorted_arr_all_link = sorted_arr_all_link[-15:]
     # add the videos to a csv
     for items in sorted_arr_all_link:
         with open('/home/txaa2019/free_gourds/Youtube Grab/Categories/' + category + '.csv', 'a') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(['https://www.youtube.com/watch?v=' + items, get_vid_title(item)])
-						
-gather_vids_US('1','2020-01-01','2020-05-09','en')
+
+# Gather the most popular videos in the United Kingdom uploaded in a certain date range
+def gather_vids_UK(category, pub_after, pub_before, language):
+    search_response_left = youtube.search().list(
+        type = 'video',
+        part = 'snippet',
+        location = '54.34428, -3.32285',
+        locationRadius = '500km',
+        videoCategoryId = category,
+        videoCaption = 'closedCaption', 
+        order = 'viewCount', 
+        publishedAfter = pub_after + 'T00:00:00Z',
+        publishedBefore = pub_before + 'T00:00:00Z',
+        relevanceLanguage = language,
+        regionCode = 'gb',
+        maxResults = '10',
+        ).execute()
+    search_response_left = search_response_left['items']
+    arr_left_link = []
+    # append the video ids for our videos to separate arrays
+    for i in search_response_left:
+        print(i['id'].get('videoId'), i['snippet'].get('title'))
+        arr_left_link.append(i['id'].get('videoId'))
+    # retrieve top 15 most viewed videos from the list
+    # add the videos to a csv
+    for items in arr_left_link:
+        with open('/home/txaa2019/free_gourds/Youtube Grab/Categories/United Kingdom/' + category + '.csv', 'a') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow([pub_after + '-' + pub_before, 'https://www.youtube.com/watch?v=' + items, get_vid_title(items)])
+            print('done writing')
+
+# Gather the most popular videos in the United Kingdom uploaded in a certain date range
+def gather_vids_singapore(category, pub_after, pub_before, language):
+    search_response_left = youtube.search().list(
+        type = 'video',
+        part = 'snippet',
+        location = '1.3622, 103.8247',
+        locationRadius = '30km',
+        videoCategoryId = category,
+        videoCaption = 'closedCaption', 
+        order = 'viewCount', 
+        publishedAfter = pub_after + 'T00:00:00Z',
+        publishedBefore = pub_before + 'T00:00:00Z',
+        relevanceLanguage = language,
+        regionCode = 'sg',
+        maxResults = '10',
+        ).execute()
+    search_response_left = search_response_left['items']
+    arr_left_link = []
+    # append the video ids for our videos to separate arrays
+    for i in search_response_left:
+        print(i['id'].get('videoId'), i['snippet'].get('title'))
+        arr_left_link.append(i['id'].get('videoId'))
+    # retrieve top 15 most viewed videos from the list
+    # add the videos to a csv
+    for items in arr_left_link:
+        with open('/home/txaa2019/free_gourds/Youtube Grab/Categories/Singapore/' + category + '.csv', 'a') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow([pub_after + '-' + pub_before, 'https://www.youtube.com/watch?v=' + items, get_vid_title(items)])
+            print('done writing')
+
+# Gather the most popular videos in the United States uploaded in a certain date range
+def gather_vids_canada(category, pub_after, pub_before, language):
+    '''
+    Since YouTube API limits to georeferencing by a 1000km radius, 
+    we must gather videos from three regions of Canada and aggregate later
+    '''
+    # region 1: west
+    search_response_left = youtube.search().list(
+        type = 'video',
+        part = 'snippet',
+        location = '58.4569, -117.4693',
+        locationRadius = '1000km',
+        videoCategoryId = category,
+        videoCaption = 'closedCaption', 
+        order = 'viewCount', 
+        publishedAfter = pub_after + 'T00:00:00Z',
+        publishedBefore = pub_before + 'T00:00:00Z',
+        relevanceLanguage = language,
+        regionCode = 'ca',
+        maxResults = '10',
+        ).execute()
+    # region 2: central
+    search_response_middle = youtube.search().list(
+        type = 'video',
+        part = 'snippet',
+        location = '58.7512, -105.7974',
+        locationRadius = '1000km',
+        videoCategoryId = category,
+        videoCaption = 'closedCaption', 
+        order = 'viewCount', 
+        publishedAfter = pub_after + 'T00:00:00Z',
+        publishedBefore = pub_before + 'T00:00:00Z',
+        relevanceLanguage = language,
+        regionCode = 'ca',
+        maxResults = '10',
+        ).execute()
+    # region 3: east
+    search_response_right = youtube.search().list(
+        type = 'video',
+        part = 'snippet',
+        location = '54.9181, -76.4334',
+        locationRadius = '1000km',
+        videoCategoryId = category,
+        videoCaption = 'closedCaption', 
+        order = 'viewCount', 
+        publishedAfter = pub_after + 'T00:00:00Z',
+        publishedBefore = pub_before + 'T00:00:00Z',
+        relevanceLanguage = language,
+        regionCode = 'ca',
+        maxResults = '10',
+        ).execute()
+    search_response_left = search_response_left['items']
+    search_response_middle = search_response_middle['items']
+    search_response_right = search_response_right['items']
+    arr_left_link = []
+    arr_middle_link = []
+    arr_right_link = []
+    # append the video ids for our videos to separate arrays
+    for i in search_response_left:
+        print(i['id'].get('videoId'), i['snippet'].get('title'))
+        arr_left_link.append(i['id'].get('videoId'))
+    for i in search_response_middle:
+        print(i['id'].get('videoId'), i['snippet'].get('title'))
+        arr_middle_link.append(i['id'].get('videoId'))
+    for i in search_response_right:
+        print(i['id'].get('videoId'), i['snippet'].get('title'))
+        arr_right_link.append(i['id'].get('videoId'))
+    # combine the arrays and remove the duplicates
+    arr_all_link = arr_left_link + arr_middle_link + arr_right_link
+    print(arr_all_link)
+    arr_all_link = list(dict.fromkeys(arr_all_link))
+    '''
+    sort the array from least viewed to most viewed
+    this odd flow is necessary or else we end up filling up youtube request quota
+    far too quickly if we call get_num_views too many times
+    ''' 
+    view_num_array = []
+    for i in arr_all_link:
+        view_num_array.append(get_num_views(i))
+    sorted_arr_all_link = []
+    for x in range(len(view_num_array)):
+        minimum = view_num_array[0]
+        for i in view_num_array:
+            print('checking...')
+            if i < minimum:
+                minimum = i
+        minimum_vid_code = arr_all_link[view_num_array.index(minimum)]
+        sorted_arr_all_link.append(minimum_vid_code)
+        arr_all_link.remove(minimum_vid_code)
+        view_num_array.remove(minimum)
+    print(sorted_arr_all_link)
+    # retrieve top 15 most viewed videos from the list
+    sorted_arr_all_link = sorted_arr_all_link[-10:]
+    print(sorted_arr_all_link)
+    # add the videos to a csv
+    for items in sorted_arr_all_link:
+        with open('/home/txaa2019/free_gourds/Youtube Grab/Categories/Canada/' + category + '.csv', 'a') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow([pub_after + '-' + pub_before, 'https://www.youtube.com/watch?v=' + items, get_vid_title(items)])
+            print('done writing')
+
+	
+start_date = "2019-11-01"
+stop_date = "2020-05-01"
+
+start = datetime.strptime(start_date, "%Y-%m-%d")
+start = start.date()
+stop = datetime.strptime(stop_date, "%Y-%m-%d")
+stop = stop.date()
+
+from datetime import timedelta
+while start < stop:
+    after = datetime.strftime(start, "%Y-%m-%d")
+    start = start + timedelta(days = 14)
+    before = datetime.strftime(start, "%Y-%m-%d")
+    print(after,before)
+    gather_vids_canada('29', after, before, 'en')
