@@ -1,3 +1,12 @@
+'''
+FREE GOURDS
+TAI XIANG
+GUY THAMPAKKUL
+SAM MILLETTE
+text_dataset_cleaning cleans our training set used for training our LSTM model. The training data being used is Stanford's
+Large IMDB Movie Review Dataset created by Maas, Andrew L. and Daly, Raymond E. and Pham, Peter T.  
+and Huang, Dan and Ng, Andrew Y. and Potts, Christopher
+'''
 import nltk
 nltk.download()
 from nltk.tokenize import word_tokenize
