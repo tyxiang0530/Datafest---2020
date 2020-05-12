@@ -1,3 +1,13 @@
+'''
+FREE GOURDS
+TAI XIANG
+GUY THAMPAKKUL
+SAM MILLETTE
+
+get_results converts our text data to uniform numpy arrays mapped through a word to integer dictionary.
+This data is then fed into our loaded sentiment analysis model and the results of analysis is outputted
+to a csv file.
+'''
 from keras.preprocessing import sequence
 import pickle
 import tensorflow as tf
@@ -5,9 +15,10 @@ import nltk
 from nltk.tokenize import word_tokenize
 import numpy as np
 
-
+# load in our word to integer dictionary
 vocab_to_word_dict = pickle.load(open("vocab_to_word_dict", "rb"))
 
+# helper method that convert words in the text to integers
 def create_ints(str_in):
     tokens = word_tokenize(str_in)
     test_ints = []
@@ -18,17 +29,21 @@ def create_ints(str_in):
             test_ints.append(0)
     return test_ints
 
+# helper method that create vectors of 500 integers so model can read them
 def split_word_vectors(text_in):
     length = 500
     chunks = []
     padded = []
     if len(text_in) > length:
+        # divides text that is too long into chunks that are 500 characters in length
         chunks = [text_in[x: x + 500] for x in range(0, len(text_in), 500)]
     else:
         chunks.append(text_in)
+    # pad our text to length of 500 if it is too short
     chunks = sequence.pad_sequences(chunks, maxlen=500)
     return chunks
 
+# calculate sentiment of a given piece of text
 def calculate_sentiment(text_in):
     loaded_model = tf.keras.models.load_model("youtube_runner.h5")
     unsplit_vector = create_ints(text_in)
@@ -47,7 +62,8 @@ def calculate_sentiment(text_in):
     if len(polarities) == 1:
         print(polarities[0][0])
         return polarities[0][0]
-        
+
+# outputs calculated sentiment into a csv file
 def output_sentiment(country_in, category_num):
     file = open('/home/txaa2019/free_gourds/Youtube Grab/text_files/' + country_in + '/' + category_num + '-text.csv')
 #     file = open('/home/txaa2019/free_gourds/Youtube Grab/text_files/All/' + country_in + '_all_text.csv')
