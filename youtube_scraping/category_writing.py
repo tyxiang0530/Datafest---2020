@@ -872,9 +872,11 @@ def gather_vids_global(pub_after, pub_before, language):
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow([pub_after + '-' + pub_before, 'https://www.youtube.com/watch?v=' + items, get_vid_title(items)])
             print('done writing')
-	
+
+# iterate through categories
 categories = ['10', '19', '22', '24', '25', '26', '27', '28']
 from datetime import timedelta
+# define time period cycle (2 weeks in this case)
 for num in categories:
 	while start < stop:
 		after = datetime.strftime(start, "%Y-%m-%d")
