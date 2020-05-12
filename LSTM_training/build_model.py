@@ -1,3 +1,11 @@
+'''
+FREE GOURDS
+TAI XIANG
+GUY THAMPAKKUL
+SAM MILLETTE
+build_model trains the most optimal model output by optimize_lstm and saves it for later use
+'''
+
 from keras import Sequential
 from keras.layers import Embedding, LSTM, Dense, Dropout
 from keras.preprocessing import sequence
