@@ -1,4 +1,10 @@
-# Iterates through hyperparameters to find most accurate model
+'''
+FREE GOURDS
+TAI XIANG
+GUY THAMPAKKUL
+SAM MILLETTE
+optimize_lstm works through various permutations of model parameters to find the most optimized one
+'''
 from keras import Sequential
 from keras.layers import Embedding, LSTM, Dense, Dropout
 from keras.preprocessing import sequence
