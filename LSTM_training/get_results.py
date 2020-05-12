@@ -34,6 +34,7 @@ def split_word_vectors(text_in):
     return chunks
 
 def calculate_sentiment(text_in):
+    loaded_model = tf.keras.models.load_model("youtube_runner.h5")
     unsplit_vector = create_ints(text_in)
     if len(unsplit_vector) == 1 and unsplit_vector[0] == 0:
         print('none')
@@ -53,6 +54,8 @@ def calculate_sentiment(text_in):
         
 def output_sentiment(country_in, category_num):
     file = open('/home/txaa2019/free_gourds/Youtube Grab/text_files/' + country_in + '/' + category_num + '-text.csv')
+#     file = open('/home/txaa2019/free_gourds/Youtube Grab/text_files/All/' + country_in + '_all_text.csv')
+#     file = open('/home/txaa2019/free_gourds/Youtube Grab/text_files/All/global_all_text.csv')
     csv_f = csv.reader(file)
     dates = []
     transcripts = []
@@ -64,6 +67,8 @@ def output_sentiment(country_in, category_num):
             break
     for period, text in zip(dates, transcripts):
          with open('/home/txaa2019/free_gourds/Results/' + country_in + '/' + category_num + '-result.csv', 'a') as csvfile:
+#         with open('/home/txaa2019/free_gourds/Results/All/' + country_in + '-result.csv', 'a') as csvfile:
+#         with open('/home/txaa2019/free_gourds/Results/All/global-result.csv', 'a') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow([period, calculate_sentiment(text)])
             
