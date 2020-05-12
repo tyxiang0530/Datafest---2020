@@ -1,10 +1,6 @@
-from keras import Sequential
-from keras.layers import Embedding, LSTM, Dense, Dropout
 from keras.preprocessing import sequence
-from keras import backend as K
 import pickle
 import tensorflow as tf
-from keras.callbacks import TensorBoard
 import nltk
 from nltk.tokenize import word_tokenize
 import numpy as np
