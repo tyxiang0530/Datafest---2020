@@ -14,11 +14,11 @@ test = pickle.load(open("new_gen_test.pickle", "rb"))
 print(len(X_train),len(y_train),len(labels_test),len(test))
 
 # Define model
-vocab_content = 80000
+vocab_content = 61409
 embedding_size = 128
 model = Sequential()
 model.add(Embedding(vocab_content, embedding_size, input_length=500))
-model.add(LSTM(100))
+model.add(LSTM(32))
 model.add(Dense(32, activation = 'sigmoid'))
 model.add(Dense(1, activation = 'sigmoid'))
 print(model.summary())
