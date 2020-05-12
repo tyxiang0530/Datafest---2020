@@ -447,3 +447,4 @@ for num in categories:
 		before = datetime.strftime(start, "%Y-%m-%d")
 		print(after,before)
 		gather_vids_canada(num, after, before, 'en')
+
