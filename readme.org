@@ -1,12 +1,15 @@
 #+title: Datafest 2020 Files
-* YouTube Video Transcript Sentiment Analysis:
+* YouTube Video Transcript Sentiment Analysis Introduction:
 With the rise of coronavirus infection rates and social impacts over the recent time period, we investigate whether individuals who upload 
 YouTube videos have artificially/unconsciously created content that trends more towards relative positivity or negativity as infection rates
 increase and time passes. Is there any relation between sentiment and government action towards virus? Is there any relation between social
-perceptions of the virus and content sentiment? \n
-We take in the most popular YouTube videos uploaded by creators in Australia, Canada, India, the United Kingdom, and the United States on a two week cycle. We obtain the transcripts from the subtitles of these YouTube videos and perform sentiment analysis on them.\n
+perceptions of the virus and content sentiment? 
+
+We take in the most popular YouTube videos uploaded by creators in Australia, Canada, India, the United Kingdom, and the United States on a two week cycle. We obtain the transcripts from the subtitles of these YouTube videos and perform sentiment analysis on them.
+
 These videos are also filtered by category. Do content creators who upload entertainment related videos create videos that display a more positive sentiment over time compared to those who upload educational videos? What about those that upload videos related to music and those that upload videos related to politics and government? Does this at all correlate to country policy or culture?
 
+* Code
 ** LSTM_training folder:
 *** This folder contains all python files on how our deep learning model for detecting polarity of sentiment was built and optimized.
 **** text_dataset_cleaning.py
