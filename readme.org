@@ -1,11 +1,25 @@
 #+title: Datafest 2020 Files
-* LSTM_training folder:
-** This folder contains all python files on how our deep learning model for detecting polarity of sentiment was built and optimized.
-*** text_dataset_cleaning.py
+* YouTube Video Transcript Sentiment Analysis:
+With the rise of coronavirus infection rates and social impacts over the recent time period, we investigate whether individuals who upload 
+YouTube videos have artificially/unconsciously created content that trends more towards relative positivity or negativity as infection rates
+increase and time passes. Is there any relation between sentiment and government action towards virus? Is there any relation between social
+perceptions of the virus and content sentiment? \n
+We take in the most popular YouTube videos uploaded by creators in Australia, Canada, India, the United Kingdom, and the United States on a two week cycle. We obtain the transcripts from the subtitles of these YouTube videos and perform sentiment analysis on them.\n
+These videos are also filtered by category. Do content creators who upload entertainment related videos create videos that display a more positive sentiment over time compared to those who upload educational videos? What about those that upload videos related to music and those that upload videos related to politics and government? Does this at all correlate to country policy or culture?
+
+** LSTM_training folder:
+*** This folder contains all python files on how our deep learning model for detecting polarity of sentiment was built and optimized.
+**** text_dataset_cleaning.py
 Details how our imdb movie dataset was preprocessed and how our word-to-int dictionary was defined
-*** optimize_lstm.py
+**** optimize_lstm.py
 Details how the hyperparameters of the LSTM model were optimized
-* youtube_scraping folder:
-** This folder contains all python files on how our YouTube video dataset was obtained
-*** category_writing.py
+**** build_model.py
+Builds and trains optimal model obtained from optimize_lstm.py
+**** get_results.py
+Returns the results of sentiment analysis
+** youtube_scraping folder:
+*** This folder contains all python files on how our YouTube video transcript dataset was obtained
+**** category_writing.py
 Details how the youtube videos used in the dataset were gathered
+**** transcript_build.py
+Gets the transcripts of youtube videos scraped by category_writing.py
