@@ -1,8 +1,8 @@
 #+title: Datafest 2020 Files
 * Free Gourds Datafest 2020 Project
-* Tai Xiang
-* Guy Thampakkul
-* Sam Millette
+Tai Xiang
+Guy Thampakkul
+Sam Millette
 
 * YouTube Video Transcript Sentiment Analysis Introduction:
 With the rise of coronavirus infection rates and social impacts over the recent time period, we investigate whether individuals who upload 
