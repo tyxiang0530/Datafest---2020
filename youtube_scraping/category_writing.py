@@ -5,7 +5,7 @@ GUY THAMPAKKUL
 SAM MILLETTE
 category_writing utilizes the youtube api to return a list of youtube video ids based off a set of parameters.
 For this project, we define parameters to be location uploaded, data uploaded, and video category
-A video category key is available in the main repository
+A video category key is available in this folder
 '''
 
 api_key = 'INSERT_YOUR_API_KEY'
