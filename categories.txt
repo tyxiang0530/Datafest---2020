@@ -1,0 +1,8 @@
+    10 - Music
+    19 - Travel and Events
+    22 - People and Blogs
+    24 - Entertainment
+    25 - News and Politics
+    26 - How-to and Style
+    27 - Education
+    28 - Science and Technology
