@@ -4,7 +4,7 @@ Sam Millette
 
 Guy Thampakkul: R code and statistical analysis
 
-Tai Xiang: Python code and visualizations
+Tai Xiang: Python code and Plotly visualizations
 
 * YouTube Video Transcript Sentiment Analysis Introduction:
 With the rise of coronavirus infection rates and social impacts over the recent time period, we investigate whether individuals who upload 
@@ -16,6 +16,15 @@ We take in the most popular YouTube videos uploaded by creators in Australia, Ca
 
 These videos are also filtered by category. Do content creators who upload entertainment related videos create videos that display a more positive sentiment over time compared to those who upload educational videos? What about those that upload videos related to music and those that upload videos related to politics and government? Does this at all correlate to country policy or culture?
 
+* Visualizations (R_Analysis Folder also contains additional visualizations)
+** PDFs
+Contain aggregation of all visualizations sorted alphanumerically by country name and then category number
+** create_graphs.py
+Details how graphs were created using python and plotly
+** html_interactables
+Contains html files of graphs sorted by country. Downloaded html graphs can be interacted with to see specific sentiment values and cases, as well as means and medians and other statistical information.
+
+
 * Python Code
 ** youtube_scraping folder:
 Details how YouTube video dataset was obtained and how the transcripts for each YouTube video were extracted. Also includes how transcript dataset was cleaned and pre-processed.
@@ -25,4 +34,4 @@ Details how the LSTM deep learning model used in this project was built, optimiz
 
 * R Code and Generated Files
 ** R_Analysis Folder
-Contains all R code used in analysis of dataset. Tests include linear regression, two-proportion Z test, two-independent-mean T test. PDF files include the outputted graphs and results yielded by the code. 
+Contains all R code used in analysis of dataset. Tests include linear regression, two-proportion Z test, two-independent-mean T test. PDF files include the output of code. Also contains additional visualizations.
