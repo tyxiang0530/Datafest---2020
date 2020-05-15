@@ -1,0 +1,164 @@
+---
+title: "DATAFEST SCRAP"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(mosaic)
+library(infer)
+library(readxl)
+library(csv)
+```
+
+Everything in this file is done from bottom chunk to top chunk, ran separately (chunks not chronological, cannot run file in its entirety).
+
+```{r}
+analysis_World <- covid_World %>%
+  filter(keep == "yes")
+
+write.csv(analysis_World,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\analysis_World_csv.csv")
+```
+
+```{r}
+covid_World = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_World.xlsx")
+```
+
+```{r}
+#data export for only final observation on each day (cummulative data for each day is kept)
+
+analysis_Australia <- covid_Australia_final %>%
+  filter(keep == "yes")
+
+write.csv(analysis_Australia,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\analysis_Australia_csv.csv")
+
+analysis_Canada <- covid_Canada_final %>%
+  filter(keep == "yes")
+
+write.csv(analysis_Canada,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\analysis_Canada_csv.csv")
+
+analysis_India <- covid_India_final %>%
+  filter(keep == "yes")
+
+write.csv(analysis_India,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\analysis_India_csv.csv")
+
+analysis_UK <- covid_UK_final %>%
+  filter(keep == "yes")
+
+write.csv(analysis_UK,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\analysis_UK_csv.csv")
+
+analysis_US <- covid_US_final %>%
+  filter(keep == "yes")
+
+write.csv(analysis_US,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\analysis_US_csv.csv")
+```
+
+```{r}
+#import global corona virus data from excel for final filter
+#copying filtered on excel did not work well
+
+covid_Australia_final = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\covid_Australia_final.xlsx")
+
+covid_Canada_final = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\covid_Canada_final.xlsx")
+
+covid_India_final = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\covid_India_final.xlsx")
+
+covid_UK_final = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\covid_UK_final.xlsx")
+
+covid_US_final = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Final Datasets\\covid_US_final.xlsx")
+```
+
+```{r}
+#corona virus data imports
+
+#import global corona virus data from excel
+covid_global = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus\\covid_19_data.xlsx")
+
+#import manipulated US covid data from excel
+covid_US = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_US.xlsx")
+
+#import manipulated Australia covid data from excel
+covid_Australia = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_Australia.xlsx")
+
+#import manipulated Canada covid data from excel
+covid_Canada = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_Canada.xlsx")
+
+#import manipulated UK covid data from excel
+covid_UK = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_UK.xlsx")
+
+#import manipulated India covid data from excel
+covid_India = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_India.xlsx")
+```
+
+```{r}
+##Filter for country
+##Download to csv files
+##everything is commented out to avoid overwriting manipulated data with same file name
+
+##US
+#covid_US_0 <- covid_global %>%
+#  filter(Country_Region == "US")
+
+#write.csv(covid_US,"C:\\Users\\gtham\\Desktop\\A - DATAFEST\\Corona Virus Manipulated\\covid_UScsv.csv")
+
+##Australia
+#covid_Australia_0 <- covid_global %>%
+#  filter(Country_Region == "Australia")
+
+#write.csv(covid_Australia_0,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_Australia.csv")
+
+##Canada
+#covid_Canada_0 <- covid_global %>%
+#  filter(Country_Region == "Canada")
+
+#write.csv(covid_Canada_0,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_Canada_csv.csv")
+
+##Ireland
+#covid_Ireland_0 <- covid_global %>%
+#  filter(Country_Region == "Ireland")
+
+#write.csv(covid_Ireland_0,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_Ireland_csv.csv")
+
+##UK
+#covid_UK_0 <- covid_global %>%
+#  filter(Country_Region == "UK")
+
+#write.csv(covid_UK_0,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_UK_csv.csv")
+
+##India
+#covid_India_0 <- covid_global %>%
+#  filter(Country_Region == "India")
+
+#write.csv(covid_India_0,"C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Corona Virus Manipulated\\covid_India_csv.csv")
+```
+
+```{r}
+#infer code reference
+# to control the randomness
+set.seed(47)
+
+# create a data frame with precovid data
+m_pos <- data.frame(pre_covid = c(rep("yes", 60), rep("no", 69)), sentiment = c(rep("positive", 33), rep("negative", 27), rep("positive", 40), rep("negative", 29)))
+
+# then find the difference in proportion of positive sentiments
+(diff_obs <- m_pos %>%
+    specify(sentiment ~ pre_covid, success = "positive") %>%
+    calculate(stat = "diff in props", order = c("no", "yes")) )
+
+# apply the infer framework to get the null differences in proportions
+null_m_pos <- m_pos %>%
+  specify(sentiment ~ pre_covid, success = "positive") %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 10000, type = "permute") %>%
+  calculate(stat = "diff in props", order = c("no", "yes"))
+
+# then visualize the null sampling distribution & p-value
+visualize(null_m_pos, bins = 10) +
+  shade_p_value(obs_stat = diff_obs, direction = "two_sided")
+
+# calculate the actual p-value
+null_m_pos %>%
+  get_p_value(obs_stat = diff_obs, direction = "two_sided")
+```
+

@@ -1,0 +1,920 @@
+---
+title: "Datafest Data Analysis India"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(mosaic)
+library(infer)
+library(readxl)
+library(csv)
+library(data.table)
+```
+
+```{r}
+#India analysis import
+India_analysis = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Analysis Datasets\\R_analysis_India.xlsx")
+```
+
+```{r}
+India_analysis_music <- India_analysis %>%
+  filter(video_category == "Music")
+
+India_analysis_travel <- India_analysis %>%
+  filter(video_category == "Travel and Events")
+
+India_analysis_people <- India_analysis %>%
+  filter(video_category == "People and Blogs")
+
+India_analysis_entertainment <- India_analysis %>%
+  filter(video_category == "Entertainment")
+
+India_analysis_news <- India_analysis %>%
+  filter(video_category == "News and Politics")
+
+India_analysis_how_to <- India_analysis %>%
+  filter(video_category == "How-to and Style")
+
+India_analysis_education <- India_analysis %>%
+  filter(video_category == "Education")
+
+India_analysis_science <- India_analysis %>%
+  filter(video_category == "Science and Technology")
+```
+
+```{r}
+#full India data data summaries
+ggplot(India_analysis) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis) +
+  geom_boxplot(aes(x = video_category, y = sentiment_score))
+
+India_analysis %>%
+  group_by(video_category) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#data summary and analysis for music dataset
+ggplot(India_analysis_music) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_music) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_music %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_music) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_music %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_music) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_music %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#two proportion z-test for music dataset
+#null hypothesis: the true proportion of positive sentiment music videos published precovid and postcovid is the same
+
+count(India_analysis_music, pre_covid == "yes")
+m_num_precovid = 59
+m_num_postcovid = 70
+m_num = 129
+
+India_analysis_music %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_m_pos = 22/59
+
+India_analysis_music %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_m_pos = 29/70
+
+p_hat_m_pos = (22+29)/(59+70)
+
+sd <- sqrt((((p_hat_m_pos)*(1-p_hat_m_pos))/59)+(((p_hat_m_pos)*(1-p_hat_m_pos))/70))
+z_score <- ((p_hat_2_m_pos-p_hat_1_m_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak music
+count(India_analysis_music, pre_outbreak == "yes")
+m_num_preoutbreak = 99
+m_num_postoutbreak = 30
+m_num = 129
+
+India_analysis_music %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_m_pos = 37/99
+
+India_analysis_music %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_m_pos = 14/30
+
+p_hat_m_pos = (37+14)/(99+30)
+
+sd <- sqrt((((p_hat_m_pos)*(1-p_hat_m_pos))/99)+(((p_hat_m_pos)*(1-p_hat_m_pos))/30))
+z_score <- ((p_hat_2_m_pos-p_hat_1_m_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary travel
+ggplot(India_analysis_travel) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_travel) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_travel %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_travel) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_travel %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_travel) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_travel %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid travel
+#null hypothesis: the true proportion of positive sentiment travel videos published precovid and postcovid is the same
+
+count(India_analysis_travel, pre_covid == "yes")
+t_num_precovid = 60
+t_num_postcovid = 69
+t_num = 129
+
+India_analysis_travel %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_t_pos = 38/60
+
+India_analysis_travel %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_t_pos = 49/69
+
+p_hat_t_pos = (38+49)/(60+69)
+
+sd <- sqrt((((p_hat_t_pos)*(1-p_hat_t_pos))/60)+(((p_hat_t_pos)*(1-p_hat_t_pos))/69))
+z_score <- ((p_hat_2_t_pos-p_hat_1_t_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak travel
+count(India_analysis_travel, pre_outbreak == "yes")
+t_num_preoutbreak = 99
+t_num_postoutbreak = 30
+t_num = 129
+
+India_analysis_travel %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_t_pos = 66/99
+
+India_analysis_travel %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_t_pos = 21/30
+
+p_hat_t_pos = (66+21)/(99+30)
+
+sd <- sqrt((((p_hat_t_pos)*(1-p_hat_t_pos))/99)+(((p_hat_t_pos)*(1-p_hat_t_pos))/30))
+z_score <- ((p_hat_2_t_pos-p_hat_1_t_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary people and blogs
+ggplot(India_analysis_people) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_people) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_people %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_people) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_people %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_people) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_people %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid people
+count(India_analysis_people, pre_covid == "yes")
+p_num_precovid = 60
+p_num_postcovid = 70
+p_num = 130
+
+India_analysis_people %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_p_pos = 29/60
+
+India_analysis_people %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_p_pos = 52/70
+
+p_hat_p_pos = (29+52)/(60+70)
+
+sd <- sqrt((((p_hat_p_pos)*(1-p_hat_p_pos))/60)+(((p_hat_p_pos)*(1-p_hat_p_pos))/70))
+z_score <- ((p_hat_2_p_pos-p_hat_1_p_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak people
+count(India_analysis_people, pre_outbreak == "yes")
+p_num_preoutbreak = 100
+p_num_postoutbreak = 30
+p_num = 130
+
+India_analysis_people %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_p_pos = 59/100
+
+India_analysis_people %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_p_pos = 22/30
+
+p_hat_p_pos = (59+22)/(100+30)
+
+sd <- sqrt((((p_hat_p_pos)*(1-p_hat_p_pos))/100)+(((p_hat_p_pos)*(1-p_hat_p_pos))/30))
+z_score <- ((p_hat_2_p_pos-p_hat_1_p_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary entertainment
+ggplot(India_analysis_entertainment) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_entertainment) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_entertainment %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_entertainment) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_entertainment %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_entertainment) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_entertainment %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid entertainment
+count(India_analysis_entertainment, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 68
+num = 130
+
+India_analysis_entertainment %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 22/60
+
+India_analysis_entertainment %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 32/68
+
+p_hat = (22+32)/(60+68)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/68))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak entertainment
+count(India_analysis_entertainment, pre_outbreak == "yes")
+num_preoutbreak = 98
+num_postoutbreak = 30
+num = 128
+
+India_analysis_entertainment %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 41/98
+
+India_analysis_entertainment %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 13/30
+
+p_hat = (41+13)/(98+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/98)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary news and politics
+ggplot(India_analysis_news) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_news) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_news %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_news) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_news %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_news) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_news %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid news
+count(India_analysis_news, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 69
+num = 129
+
+India_analysis_news %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 4/60
+
+India_analysis_news %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 33/69
+
+p_hat = (4+33)/(60+69)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/69))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak news
+count(India_analysis_news, pre_outbreak == "yes")
+num_preoutbreak = 99
+num_postoutbreak = 30
+num = 129
+
+India_analysis_news %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 23/99
+
+India_analysis_news %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 14/30
+
+p_hat = (23+14)/(99+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/99)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary how-to and style
+ggplot(India_analysis_how_to) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_how_to) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_how_to %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_how_to) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_how_to %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_how_to) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_how_to %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid how-to
+count(India_analysis_how_to, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 70
+num = 130
+
+India_analysis_how_to %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 35/60
+
+India_analysis_how_to %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 39/70
+
+p_hat = (35+39)/(60+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak how-to
+count(India_analysis_how_to, pre_outbreak == "yes")
+num_preoutbreak = 100
+num_postoutbreak = 30
+num = 130
+
+India_analysis_how_to %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 56/100
+
+India_analysis_how_to %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 18/30
+
+p_hat = (56+18)/(100+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/100)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary education
+ggplot(India_analysis_education) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_education) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_education %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_education) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_education %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_education) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_education %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid education
+count(India_analysis_education, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 70
+num = 130
+
+India_analysis_education %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 13/60
+
+India_analysis_education %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 25/70
+
+p_hat = (13+25)/(60+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak education
+count(India_analysis_education, pre_outbreak == "yes")
+num_preoutbreak = 100
+num_postoutbreak = 30
+num = 130
+
+India_analysis_education %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 28/100
+
+India_analysis_education %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 10/30
+
+p_hat = (28+10)/(100+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/100)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary science and technology
+ggplot(India_analysis_science) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_science) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_science %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_science) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_science %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_science) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_science %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid scitech
+count(India_analysis_science, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 70
+num = 130
+
+India_analysis_science %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 27/60
+
+India_analysis_science %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 31/70
+
+p_hat = (27+31)/(60+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak scitech
+count(India_analysis_science, pre_outbreak == "yes")
+num_preoutbreak = 100
+num_postoutbreak = 30
+num = 130
+
+India_analysis_science %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 47/100
+
+India_analysis_science %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 11/30
+
+p_hat = (47+11)/(100+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/100)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#Youtube API All Categories
+India_analysis_all <- India_analysis %>%
+  filter(video_category == "All")
+```
+
+```{r}
+#data summary all categories
+ggplot(India_analysis_all) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(India_analysis_all) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+India_analysis_all %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_all) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+India_analysis_all %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(India_analysis_all) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+India_analysis_all %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid all categories
+count(India_analysis_all, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 70
+num = 130
+
+India_analysis_all %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 36/60
+
+India_analysis_all %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 53/70
+
+p_hat = (36+53)/(60+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak all categories
+count(India_analysis_all, pre_outbreak == "yes")
+num_preoutbreak = 100
+num_postoutbreak = 30
+num = 130
+
+India_analysis_all %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 66/100
+
+India_analysis_all %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 23/30
+
+p_hat = (66+23)/(100+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/100)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#Two independent samples t-tests; Comparing two independent means
+
+#pre_covid music
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_music)
+
+#pre_outbreak music
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_music)
+
+#pre_covid travel and events
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_travel)
+
+#pre_outbreak travel and events
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_travel)
+
+#pre_covid people and blogs
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_people)
+
+#pre_outbreak people and blogs
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_people)
+
+#pre_covid entertainment
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_entertainment)
+
+#pre_outbreak entertainment
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_entertainment)
+
+#pre_covid news and politics
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_news)
+
+#pre_outbreak news and politics
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_news)
+
+#pre_covid how-to and style
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_how_to)
+
+#pre_outbreak how-to and style
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_how_to)
+
+#pre_covid education
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_education)
+
+#pre_outbreak education
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_education)
+
+#pre_covid science and technology
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_science)
+
+#pre_outbreak science and technology
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_science)
+
+#pre_covid all categories
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = India_analysis_all)
+
+#pre_outbreak categories
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = India_analysis_all)
+```

@@ -1,0 +1,920 @@
+---
+title: "Datafest Data Analysis Canada"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(mosaic)
+library(infer)
+library(readxl)
+library(csv)
+library(data.table)
+```
+
+```{r}
+#US analysis import
+Canada_analysis = read_excel("C:\\Users\\gtham\\OneDrive - Pomona College\\A - DATAFEST\\Analysis Datasets\\R_analysis_Canada.xlsx")
+```
+
+```{r}
+Canada_analysis_music <- Canada_analysis %>%
+  filter(video_category == "Music")
+
+Canada_analysis_travel <- Canada_analysis %>%
+  filter(video_category == "Travel and Events")
+
+Canada_analysis_people <- Canada_analysis %>%
+  filter(video_category == "People and Blogs")
+
+Canada_analysis_entertainment <- Canada_analysis %>%
+  filter(video_category == "Entertainment")
+
+Canada_analysis_news <- Canada_analysis %>%
+  filter(video_category == "News and Politics")
+
+Canada_analysis_how_to <- Canada_analysis %>%
+  filter(video_category == "How-to and Style")
+
+Canada_analysis_education <- Canada_analysis %>%
+  filter(video_category == "Education")
+
+Canada_analysis_science <- Canada_analysis %>%
+  filter(video_category == "Science and Technology")
+```
+
+```{r}
+#full Canada data data summaries
+ggplot(Canada_analysis) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis) +
+  geom_boxplot(aes(x = video_category, y = sentiment_score))
+
+Canada_analysis %>%
+  group_by(video_category) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#data summary and analysis for music dataset
+ggplot(Canada_analysis_music) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_music) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_music %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_music) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_music %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_music) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_music %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#two proportion z-test for music dataset
+#null hypothesis: the true proportion of positive sentiment music videos published precovid and postcovid is the same
+
+count(Canada_analysis_music, pre_covid == "yes")
+m_num_precovid = 57
+m_num_postcovid = 69
+m_num = 126
+
+Canada_analysis_music %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_m_pos = 21/57
+
+Canada_analysis_music %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_m_pos = 25/69
+
+p_hat_m_pos = (21+25)/(57+69)
+
+sd <- sqrt((((p_hat_m_pos)*(1-p_hat_m_pos))/57)+(((p_hat_m_pos)*(1-p_hat_m_pos))/69))
+z_score <- ((p_hat_2_m_pos-p_hat_1_m_pos)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak music
+count(Canada_analysis_music, pre_outbreak == "yes")
+m_num_preoutbreak = 97
+m_num_postoutbreak = 29
+m_num = 126
+
+Canada_analysis_music %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_m_pos = 36/97
+
+Canada_analysis_music %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_m_pos = 10/29
+
+p_hat_m_pos = (36+10)/(97+29)
+
+sd <- sqrt((((p_hat_m_pos)*(1-p_hat_m_pos))/97)+(((p_hat_m_pos)*(1-p_hat_m_pos))/29))
+z_score <- ((p_hat_2_m_pos-p_hat_1_m_pos)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary travel
+ggplot(Canada_analysis_travel) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_travel) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_travel %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_travel) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_travel %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_travel) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_travel %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid travel
+#null hypothesis: the true proportion of positive sentiment travel videos published precovid and postcovid is the same
+
+count(Canada_analysis_travel, pre_covid == "yes")
+t_num_precovid = 60
+t_num_postcovid = 70
+t_num = 130
+
+Canada_analysis_travel %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_t_pos = 42/60
+
+Canada_analysis_travel %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_t_pos = 45/70
+
+p_hat_t_pos = (42+45)/(60+70)
+
+sd <- sqrt((((p_hat_t_pos)*(1-p_hat_t_pos))/60)+(((p_hat_t_pos)*(1-p_hat_t_pos))/70))
+z_score <- ((p_hat_2_t_pos-p_hat_1_t_pos)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak travel
+count(Canada_analysis_travel, pre_outbreak == "yes")
+t_num_preoutbreak = 100
+t_num_postoutbreak = 30
+t_num = 130
+
+Canada_analysis_travel %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_t_pos = 67/100
+
+Canada_analysis_travel %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_t_pos = 20/30
+
+p_hat_t_pos = (67+20)/(100+30)
+
+sd <- sqrt((((p_hat_t_pos)*(1-p_hat_t_pos))/100)+(((p_hat_t_pos)*(1-p_hat_t_pos))/30))
+z_score <- ((p_hat_2_t_pos-p_hat_1_t_pos)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary people and blogs
+ggplot(Canada_analysis_people) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_people) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_people %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_people) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_people %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_people) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_people %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid people
+count(Canada_analysis_people, pre_covid == "yes")
+p_num_precovid = 60
+p_num_postcovid = 69
+p_num = 129
+
+Canada_analysis_people %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_p_pos = 36/60
+
+Canada_analysis_people %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_p_pos = 44/69
+
+p_hat_p_pos = (36+44)/(60+69)
+
+sd <- sqrt((((p_hat_p_pos)*(1-p_hat_p_pos))/60)+(((p_hat_p_pos)*(1-p_hat_p_pos))/69))
+z_score <- ((p_hat_2_p_pos-p_hat_1_p_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak people
+count(Canada_analysis_people, pre_outbreak == "yes")
+p_num_preoutbreak = 100
+p_num_postoutbreak = 29
+p_num = 129
+
+Canada_analysis_people %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_1_p_pos = 59/100
+
+Canada_analysis_people %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+p_hat_2_p_pos = 21/29
+
+p_hat_p_pos = (59+21)/(100+29)
+
+sd <- sqrt((((p_hat_p_pos)*(1-p_hat_p_pos))/100)+(((p_hat_p_pos)*(1-p_hat_p_pos))/29))
+z_score <- ((p_hat_2_p_pos-p_hat_1_p_pos)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary entertainment
+ggplot(Canada_analysis_entertainment) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_entertainment) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_entertainment %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_entertainment) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_entertainment %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_entertainment) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_entertainment %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid entertainment
+count(Canada_analysis_entertainment, pre_covid == "yes")
+num_precovid = 59
+num_postcovid = 69
+num = 128
+
+Canada_analysis_entertainment %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 39/59
+
+Canada_analysis_entertainment %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 39/69
+
+p_hat = (39+39)/(59+69)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/59)+(((p_hat)*(1-p_hat))/69))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak entertainment
+count(Canada_analysis_entertainment, pre_outbreak == "yes")
+num_preoutbreak = 98
+num_postoutbreak = 30
+num = 128
+
+Canada_analysis_entertainment %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 59/98
+
+Canada_analysis_entertainment %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 19/30
+
+p_hat = (59+19)/(98+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/98)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary news and politics
+ggplot(Canada_analysis_news) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_news) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_news %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_news) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_news %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_news) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_news %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid news
+count(Canada_analysis_news, pre_covid == "yes")
+num_precovid = 59
+num_postcovid = 70
+num = 129
+
+Canada_analysis_news %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 29/59
+
+Canada_analysis_news %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 25/70
+
+p_hat = (29+25)/(59+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/59)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak news
+count(Canada_analysis_news, pre_outbreak == "yes")
+num_preoutbreak = 99
+num_postoutbreak = 30
+num = 129
+
+Canada_analysis_news %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 45/99
+
+Canada_analysis_news %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 9/30
+
+p_hat = (45+9)/(99+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/99)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary how-to and style
+ggplot(Canada_analysis_how_to) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_how_to) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_how_to %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_how_to) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_how_to %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_how_to) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_how_to %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid how-to
+count(Canada_analysis_how_to, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 69
+num = 129
+
+Canada_analysis_how_to %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 41/60
+
+Canada_analysis_how_to %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 35/69
+
+p_hat = (41+35)/(60+69)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/69))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak how-to
+count(Canada_analysis_how_to, pre_outbreak == "yes")
+num_preoutbreak = 99
+num_postoutbreak = 30
+num = 129
+
+Canada_analysis_how_to %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 64/99
+
+Canada_analysis_how_to %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 12/30
+
+p_hat = (64+12)/(99+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/99)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary education
+ggplot(Canada_analysis_education) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_education) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_education %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_education) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_education %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_education) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_education %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid education
+count(Canada_analysis_education, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 70
+num = 130
+
+Canada_analysis_education %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 33/60
+
+Canada_analysis_education %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 43/70
+
+p_hat = (33+43)/(60+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak education
+count(Canada_analysis_education, pre_outbreak == "yes")
+num_preoutbreak = 100
+num_postoutbreak = 30
+num = 130
+
+Canada_analysis_education %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 57/100
+
+Canada_analysis_education %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 19/30
+
+p_hat = (57+19)/(100+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/100)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#data summary science and technology
+ggplot(Canada_analysis_science) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_science) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_science %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_science) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_science %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_science) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_science %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid scitech
+count(Canada_analysis_science, pre_covid == "yes")
+num_precovid = 50
+num_postcovid = 70
+num = 120
+
+Canada_analysis_science %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 22/50
+
+Canada_analysis_science %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 41/70
+
+p_hat = (22+41)/(50+70)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/50)+(((p_hat)*(1-p_hat))/70))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak scitech
+count(Canada_analysis_science, pre_outbreak == "yes")
+num_preoutbreak = 90
+num_postoutbreak = 30
+num = 120
+
+Canada_analysis_science %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 42/90
+
+Canada_analysis_science %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 21/30
+
+p_hat = (42+21)/(90+30)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/90)+(((p_hat)*(1-p_hat))/30))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#Youtube API All Categories
+Canada_analysis_all <- Canada_analysis %>%
+  filter(video_category == "All")
+```
+
+```{r}
+#data summary all categories
+ggplot(Canada_analysis_all) +
+  geom_point(aes(x = fortnight, y = sentiment_score))
+
+ggplot(Canada_analysis_all) +
+  geom_boxplot(aes(x = fortnight_letter, y = sentiment_score))
+
+Canada_analysis_all %>%
+  group_by(fortnight) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_all) +
+  geom_boxplot(aes(x = pre_covid, y = sentiment_score))
+
+Canada_analysis_all %>%
+  group_by(pre_covid) %>%
+  summarize(mean(sentiment_score))
+
+ggplot(Canada_analysis_all) +
+  geom_boxplot(aes(x = pre_outbreak, y = sentiment_score))
+
+Canada_analysis_all %>%
+  group_by(pre_outbreak) %>%
+  summarize(mean(sentiment_score))
+```
+
+```{r}
+#precovid all categories
+count(Canada_analysis_all, pre_covid == "yes")
+num_precovid = 60
+num_postcovid = 69
+num = 129
+
+Canada_analysis_all %>%
+  filter(pre_covid == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos precovid from sample
+p_hat1 = 37/60
+
+Canada_analysis_all %>%
+  filter(pre_covid == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postcovid from sample
+p_hat2 = 47/69
+
+p_hat = (43+47)/(60+69)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/60)+(((p_hat)*(1-p_hat))/69))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#outbreak all categories
+count(Canada_analysis_all, pre_outbreak == "yes")
+num_preoutbreak = 100
+num_postoutbreak = 29
+num = 129
+
+Canada_analysis_all %>%
+  filter(pre_outbreak == "yes") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos preoutbreak from sample
+p_hat1 = 64/100
+
+Canada_analysis_all %>%
+  filter(pre_outbreak == "no") %>%
+  count(sentiment_score > 0.5)
+
+#proportion of positive sentiment videos postoutbreak from sample
+p_hat2 = 20/29
+
+p_hat = (64+29)/(100+29)
+
+sd <- sqrt((((p_hat)*(1-p_hat))/100)+(((p_hat)*(1-p_hat))/29))
+z_score <- ((p_hat2-p_hat1)-0)/sd
+
+#p-value
+2* (1-xpnorm(z_score, 0, 1))
+```
+
+```{r}
+#Two independent samples t-tests; Comparing two independent means
+
+#pre_covid music
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_music)
+
+#pre_outbreak music
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_music)
+
+#pre_covid travel and events
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_travel)
+
+#pre_outbreak travel and events
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_travel)
+
+#pre_covid people and blogs
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_people)
+
+#pre_outbreak people and blogs
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_people)
+
+#pre_covid entertainment
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_entertainment)
+
+#pre_outbreak entertainment
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_entertainment)
+
+#pre_covid news and politics
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_news)
+
+#pre_outbreak news and politics
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_news)
+
+#pre_covid how-to and style
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_how_to)
+
+#pre_outbreak how-to and style
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_how_to)
+
+#pre_covid education
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_education)
+
+#pre_outbreak education
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_education)
+
+#pre_covid science and technology
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_science)
+
+#pre_outbreak science and technology
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_science)
+
+#pre_covid all categories
+t.test(sentiment_score ~ pre_covid, alternative = "two.sided", data = Canada_analysis_all)
+
+#pre_outbreak categories
+t.test(sentiment_score ~ pre_outbreak, alternative = "two.sided", data = Canada_analysis_all)
+```
