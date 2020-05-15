@@ -35,4 +35,5 @@ Details how the youtube videos used in the dataset were gathered
 Gets the transcripts of youtube videos scraped by category_writing.py
 
 * R Code and Generated Files
-Contains all R code used in analysis of dataset. PDF files include the output yielded by the code.
+** R_Analysis Folder
+Contains all R code used in analysis of dataset. Tests include linear regression, two-proportion Z test, two-independent-mean T test. PDF files include the outputted graphs and results yielded by the code. 
