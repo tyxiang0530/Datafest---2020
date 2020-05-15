@@ -17,22 +17,11 @@ We take in the most popular YouTube videos uploaded by creators in Australia, Ca
 These videos are also filtered by category. Do content creators who upload entertainment related videos create videos that display a more positive sentiment over time compared to those who upload educational videos? What about those that upload videos related to music and those that upload videos related to politics and government? Does this at all correlate to country policy or culture?
 
 * Python Code
-** LSTM_training folder:
-*** This folder contains all python files on how our deep learning model for detecting polarity of sentiment was built and optimized.
-**** text_dataset_cleaning.py
-Details how our imdb movie dataset was preprocessed and how our word-to-int dictionary was defined
-**** optimize_lstm.py
-Details how the hyperparameters of the LSTM model were optimized
-**** build_model.py
-Builds and trains optimal model obtained from optimize_lstm.py
-**** get_results.py
-Returns the results of sentiment analysis
 ** youtube_scraping folder:
-*** This folder contains all python files on how our YouTube video transcript dataset was obtained
-**** category_writing.py
-Details how the youtube videos used in the dataset were gathered
-**** transcript_build.py
-Gets the transcripts of youtube videos scraped by category_writing.py
+Details how YouTube video dataset was obtained and how the transcripts for each YouTube video were extracted. Also includes how transcript dataset was cleaned and pre-processed.
+
+** LSTM_training folder:
+Details how the LSTM deep learning model used in this project was built, optimized and deployed. Also includes how training data was pre-processed and how the YouTube data-set was pre-processed in order to be compatible with the deep learning model.
 
 * R Code and Generated Files
 ** R_Analysis Folder
