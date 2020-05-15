@@ -19,8 +19,6 @@ These videos are also filtered by category. Do content creators who upload enter
 * Visualizations (R_Analysis Folder also contains additional visualizations)
 ** PDFs
 Contain aggregation of all visualizations sorted alphanumerically by country name and then category number
-** create_graphs.py
-Details how graphs were created using python and plotly
 ** html_interactables
 Contains html files of graphs sorted by country. Downloaded html graphs can be interacted with to see specific sentiment values and cases, as well as means and medians and other statistical information.
 
@@ -34,4 +32,4 @@ Details how the LSTM deep learning model used in this project was built, optimiz
 
 * R Code and Generated Files
 ** R_Analysis Folder
-Contains all R code used in analysis of dataset. Tests include linear regression, two-proportion Z test, two-independent-mean T test. PDF files include the output of code. Also contains additional visualizations.
+Contains all R code used in analysis of dataset. Tests include linear regression, two-proportion Z test, two-independent-mean T test. PDF files include the output of R code. Also contains additional visualizations.
