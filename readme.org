@@ -16,6 +16,11 @@ We take in the most popular YouTube videos uploaded by creators in Australia, Ca
 
 These videos are also filtered by category. Do content creators who upload entertainment related videos create videos that display a more positive sentiment over time compared to those who upload educational videos? What about those that upload videos related to music and those that upload videos related to politics and government? Does this at all correlate to country policy or culture?
 
+
+* Dataset
+Contains sentiment analysis values for all videos, Coronavirus confirmed cases, total deaths, total recoveries, and all data-sets necessary for analysis and completion of project. Also includes link to Johns Hopkins CSSEGISandData repository where Coronavirus statistics were obtained.
+
+
 * Visualizations (R_Analysis Folder also contains additional visualizations)
 ** PDFs
 Contain aggregation of all visualizations sorted alphanumerically by country name and then category number
