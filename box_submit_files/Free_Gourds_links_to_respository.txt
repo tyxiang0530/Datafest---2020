@@ -1,0 +1,3 @@
+Free Gourds - Sam Millette - sama2019@mymail.pomona.edu, Guy Thampakkul - gtac2019@mymail.pomona.edu, Tai Xiang - txaa2019@mymail.pomona.edu
+Github Repository (Additional Visualizations, Code, Datasets): https://github.com/tyxiang0530/Datafest---2020
+Johns Hopkins Github Covid Repository: https://github.com/CSSEGISandData/COVID-19
