@@ -1,0 +1,4 @@
+*negative z_score means lower proportion of videos with positive sentiments post covid/outbreak. 
+*positive z_score means higher proportion of videos with positive sentiments post covid/outbreak. 
+*larger absolute value on negative end of 95% Confidence Interval means higher sentiment score pre covid/outbreak. 
+*larger absolute value on positive end of 95% Confidence Interval means higher sentiment score post covid/outbreak.
